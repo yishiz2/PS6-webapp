@@ -20,16 +20,17 @@ ui <- fluidPage(
     # Application title
     titlePanel("UAH"),
     
-
-    
     tabsetPanel(
       tabPanel("About", 
-               p("This is the content of Tab 1"),
-               p("second line")),
+               p("This app uses satellite temperature data from *UAH*"),
+               p("Temperature temp is measured as deviation (deg C) from 1991-2020 baseline"),
+               dataTableOutput("sample")),
       tabPanel("Plots", 
                column(width = 3,
                       checkboxGroupInput("regions", "Select regions", choices = unique(data$region), selected = "globe"),
-                      checkboxInput("trendline", "Trendline", "Display trend line", value = FALSE)
+                      textOutput("Display trendline"),
+                      checkboxInput("trendline", "Display trend line", value = FALSE),
+                      selectInput("color_palette", "Select color palette", choices = c("Default" = "Default", "Plasma" = "plasma"), selected = "")
                       ),
                mainPanel(plotOutput("scatterplot"))
                ),
@@ -39,6 +40,10 @@ ui <- fluidPage(
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
+  output$sample <- renderDataTable({
+    data %>%
+      sample_n(6)
+  })
 
   # Filter data based on selected regions
   filtered_data <- reactive({
@@ -54,6 +59,11 @@ server <- function(input, output) {
     if (input$trendline) {
       p <- p + geom_smooth(method = "lm")
     }
+    
+    if (!is.null(input$color_palette) && input$color_palette != "") {
+      p <- p + scale_color_viridis_d()
+    }
+    
     p
   })
 }

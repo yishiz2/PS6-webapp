@@ -1,0 +1,13 @@
+name: PS6-webapp
+title: PS6-webapp
+username:
+account: yishireenazheng
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 8498494
+bundleId: 6924873
+url: https://yishireenazheng.shinyapps.io/PS6-webapp/
+when: 1678173737.08915
+lastSyncTime: 1678173737.08917
+asMultiple: FALSE
+asStatic: FALSE
